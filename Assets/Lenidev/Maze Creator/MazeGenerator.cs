@@ -15,7 +15,7 @@ public class MazeGenerator : MonoBehaviour
     public int wallWidth;
     Stack<CellBlock> mazeNavStack;
     CellBlock[] mazeGrid;
-    CellBlock[] visited;
+    List<CellBlock> visited;
 
     public CellBlock cell;
     private CellBlock current;
@@ -23,6 +23,7 @@ public class MazeGenerator : MonoBehaviour
     public float delayTimer = 0.0f;
     void Start()
     {
+        visited = new List<CellBlock>();
         mazeNavStack = new Stack<CellBlock>(mazeSize*mazeSize);
         mazeGrid = new CellBlock[mazeSize*mazeSize];
 
@@ -31,6 +32,7 @@ public class MazeGenerator : MonoBehaviour
         {
             for (int x = 0; x<mazeSize; x++)
             {
+                //await Task.Delay((int)(delayTimer * 1000f));
                 CellBlock cellInstance = Instantiate(cell, new Vector3(x*10, 0, z*10), Quaternion.identity);
                 cellInstance.x= x;
                 cellInstance.z= z;
@@ -51,22 +53,70 @@ public class MazeGenerator : MonoBehaviour
         x = z = 0;
 
         var curr = mazeGrid[0];
-        CellBlock[] neighbors = GetNeighbors(x, z);
+        Dictionary<CellBlock, CellBlock.WallDirection> directionalNeighbours = GetDirectionalNeighbors(x, z);
 
-        while(neighbors.Length > 0) 
+        while (visited.Count !=  mazeGrid.Length)
         {
-            await Task.Delay((int) (delayTimer * 1000f));
+            Debug.Log(visited.Count);
+            await Task.Delay((int)(delayTimer * 1000f));
             curr.visited = true;
-            mazeNavStack.Push(curr);
-            neighbors = GetNeighbors(curr.x, curr.z);
-            if(neighbors.Length > 0)
+            
+            
+            directionalNeighbours= GetDirectionalNeighbors(curr.x, curr.z);
+            if (directionalNeighbours.Count > 0)
             {
-                CellBlock nextNeighbor = GetRandomNeighbour(neighbors);
+                mazeNavStack.Push(curr);
+                visited.Add(curr);
+                Tuple<CellBlock, CellBlock.WallDirection> dict = GetRandomNeighbourFromDictionary(directionalNeighbours);
+                CellBlock nextNeighbor = dict.Item1;
+
+                // Direction the neighbour lies relative to the current cell
+                CellBlock.WallDirection dir = dict.Item2;
+                switch (dir)
+                {
+                    case CellBlock.WallDirection.NORTH:
+                        {
+                            curr.AddPathDirection(dir);
+                            curr.RemoveWall(dir);
+                            var opp = CellBlock.WallDirection.SOUTH;
+                            nextNeighbor.AddPathDirection(opp);
+                            nextNeighbor.RemoveWall(opp);
+                        }
+                        break;case CellBlock.WallDirection.EAST:
+                        {
+                            curr.RemoveWall(dir);
+                            curr.AddPathDirection(dir);
+                            var opp = CellBlock.WallDirection.WEST;
+                            nextNeighbor.AddPathDirection(opp);
+                            nextNeighbor.RemoveWall(opp);
+                        }
+                        break;case CellBlock.WallDirection.SOUTH:
+                        {
+                            curr.RemoveWall(dir);
+                            curr.AddPathDirection(dir);
+                            var opp = CellBlock.WallDirection.NORTH;
+                            nextNeighbor.AddPathDirection(opp);
+                            nextNeighbor.RemoveWall(opp);
+                        }
+                        break;case CellBlock.WallDirection.WEST:
+                        {
+                            curr.RemoveWall(dir);
+                            curr.AddPathDirection(dir);
+                            var opp = CellBlock.WallDirection.EAST;
+                            nextNeighbor.AddPathDirection(opp);
+                            nextNeighbor.RemoveWall(opp);
+                        }
+                        break;
+                }
                 curr = nextNeighbor;
 
             }
-  
-           
+            else if (directionalNeighbours.Count == 0) {
+                curr = mazeNavStack.Pop();
+                continue;
+            }
+            
+
         }
 
     }
@@ -89,17 +139,20 @@ public class MazeGenerator : MonoBehaviour
         return x + z * mazeSize;
     }
 
-    CellBlock[] GetNeighbors(int x, int z)
+
+    Dictionary<CellBlock, CellBlock.WallDirection> GetDirectionalNeighbors(int x, int z)
     {
         List<CellBlock> neighbors = new List<CellBlock>();
         Dictionary<CellBlock, CellBlock.WallDirection> directionalNeighbors = new Dictionary<CellBlock, CellBlock.WallDirection>();
-        #nullable enable
+#nullable enable
         CellBlock? top, left, bottom, right;
         top = left = bottom = right = null;
-        var top_index = _getNeighbourIndex(x, z-1);
+
+        // The Indices are reversed because the generation of cells are starting from bottom to top.
+        var top_index = _getNeighbourIndex(x, z+1);
         var left_index = _getNeighbourIndex(x-1, z);
-        var bottom_index = _getNeighbourIndex(x, z+1);
-        var right_index = _getNeighbourIndex(x+1,z);
+        var bottom_index = _getNeighbourIndex(x, z-1);
+        var right_index = _getNeighbourIndex(x+1, z);
 
         // Check Top
         if (top_index > -1)
@@ -123,26 +176,21 @@ public class MazeGenerator : MonoBehaviour
         }
 
         CellBlock?[] _ = new CellBlock?[] { top, left, bottom, right };
-        for (var i=0; i < _.Length; i++)
+        for (var i = 0; i < _.Length; i++)
         {
-            if (_[i]!=null)
+            CellBlock? cell = _[i];
+            if (cell!=null)
             {
-                if(_[i].visited)
+                if (cell.visited)
                 {
                     continue;
                 }
-                directionalNeighbors.Add(_[i], (CellBlock.WallDirection)i);
+                // Direction the neighbour lies relative to the current cell
+                directionalNeighbors.Add(cell, (CellBlock.WallDirection)i);
                 neighbors.Add(cell);
             }
         }
-        return neighbors.ToArray();
-    }
-
-    CellBlock GetRandomNeighbour(CellBlock[] cells) 
-    {
-        System.Random random = new System.Random();
-        var i = random.Next(cells.Length);
-        return cells[i];
+        return directionalNeighbors;
     }
 
     Tuple<CellBlock, CellBlock.WallDirection> GetRandomNeighbourFromDictionary(Dictionary<CellBlock, CellBlock.WallDirection> cellDict)

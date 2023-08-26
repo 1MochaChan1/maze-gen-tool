@@ -32,7 +32,7 @@ public class CellBlock : MonoBehaviour
     public int z;
     public enum WallDirection
     {
-            NORTH=0, WEST=1, SOUTH=2, EAST=3
+            NORTH=0, EAST=1, SOUTH=2, WEST=3
     }
 
     public CellBlock() { 
