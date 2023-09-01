@@ -111,7 +111,7 @@ public class MazeGenerator : MonoBehaviour
                 curr = nextNeighbor;
 
             }
-            else if (directionalNeighbours.Count == 0) {
+            else if (directionalNeighbours.Count == 0 & mazeNavStack.Count > 0) {
                 curr = mazeNavStack.Pop();
                 continue;
             }

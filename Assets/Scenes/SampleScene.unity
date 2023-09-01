@@ -446,11 +446,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19867e3b99c73a944ac200f976ae9d3b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mazeSize: 8
+  mazeSize: 24
   pathWidth: 1
   wallWidth: 1
   cell: {fileID: 451173826}
-  delayTimer: 1
+  delayTimer: 0.1
 --- !u!4 &1737604769
 Transform:
   m_ObjectHideFlags: 0
