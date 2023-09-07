@@ -49,10 +49,6 @@ public class InventoryManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Tab))
         {
             inventoryVisible = !inventoryVisible;
-            if(inventoryVisible)
-            {
-                
-            }
             inventoryGrid.SetActive(inventoryVisible);
             
         }

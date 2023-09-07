@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.UIElements;
 
-public class PlayerMovement : MonoBehaviour, IPickup
+public class Player : MonoBehaviour, IPickup
 {
     [Header("Movement")]
     public float moveSpeed;
