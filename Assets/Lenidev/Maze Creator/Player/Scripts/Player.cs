@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.UI;
 using UnityEngine.UIElements;
 
 public class Player : MonoBehaviour, IPickup
@@ -21,10 +22,10 @@ public class Player : MonoBehaviour, IPickup
 
     [Header("Ground Check")]
     public float playerHeight;
-    public LayerMask groundMask;
+    public LayerMask mask;
 
 
-    bool grounded;
+    bool grounded=true;
 
     float hInput;
     float vInput;
@@ -45,8 +46,11 @@ public class Player : MonoBehaviour, IPickup
     // Update is called once per frame
     void Update()
     {
-        
-        grounded = Physics.Raycast(transform.position, Vector3.down, (playerHeight * 0.5f) + 0.5f, groundMask);
+
+
+        grounded = Physics.Raycast(transform.position, Vector3.down, (playerHeight * 0.5f) + 0.5f, mask);
+
+
         HandleInput();
         ClampSpeed();
 
@@ -63,7 +67,6 @@ public class Player : MonoBehaviour, IPickup
 
     private void FixedUpdate()
     {
-        //rb.transform.rotation = Vector3.Lerp();
         MovePlayer();
         Jump();
     }

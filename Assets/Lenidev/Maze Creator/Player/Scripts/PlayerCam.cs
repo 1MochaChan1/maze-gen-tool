@@ -8,6 +8,7 @@ public class PlayerCam : MonoBehaviour
     [Range(0f, 15f)] public float verticalSensitivity;
 
     public Transform orientaion;
+    public Transform head;
 
     float yRotation;
     float xRotation;
@@ -33,5 +34,6 @@ public class PlayerCam : MonoBehaviour
         // Using the rotation values
         transform.rotation = Quaternion.Euler(xRotation, yRotation, 0f);
         orientaion.rotation = Quaternion.Euler(0f, yRotation, 0f);
+        head.rotation =Quaternion.Euler(xRotation, orientaion.eulerAngles.y, 0f);
     }
 }

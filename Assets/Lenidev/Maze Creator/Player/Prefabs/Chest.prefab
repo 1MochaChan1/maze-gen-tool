@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1802059262982627126}
   - component: {fileID: 3142267806817055929}
   - component: {fileID: 1803221157382698547}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Trunk
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 6812100120608689594}
   - component: {fileID: 6812100120608689593}
   - component: {fileID: 6812100120608689595}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Chest
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -157,7 +157,7 @@ GameObject:
   - component: {fileID: 3192063554819653227}
   - component: {fileID: 5782837103745694342}
   - component: {fileID: 4069865862936541452}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Lid
   m_TagString: Untagged
   m_Icon: {fileID: 0}

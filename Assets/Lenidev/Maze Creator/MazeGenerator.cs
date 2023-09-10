@@ -57,7 +57,6 @@ public class MazeGenerator : MonoBehaviour
 
         while (visited.Count !=  mazeGrid.Length)
         {
-            Debug.Log(visited.Count);
             await Task.Delay((int)(delayTimer * 1000f));
             curr.visited = true;
             

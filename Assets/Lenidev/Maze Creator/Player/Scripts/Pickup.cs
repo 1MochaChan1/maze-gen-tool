@@ -34,7 +34,7 @@ public class Pickup : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        //Debug.Log();
+
         if (!triggered)
         {
             var _ = other.gameObject.transform.parent;
@@ -52,7 +52,7 @@ public class Pickup : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        //Debug.Log(collision.gameObject.CompareTag("LootDetector"));
+
         var _ = collision.gameObject;
 
         if (_.TryGetComponent<Player>(out Player player))

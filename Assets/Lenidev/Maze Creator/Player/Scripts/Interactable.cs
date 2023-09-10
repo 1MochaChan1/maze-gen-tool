@@ -6,7 +6,6 @@ public class Interactable : MonoBehaviour, IInteractable
 {
     public void Interact()
     {
-        Debug.Log("Ouch!!");
     }
 
     // Start is called before the first frame update

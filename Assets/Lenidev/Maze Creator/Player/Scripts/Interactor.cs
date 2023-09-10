@@ -14,7 +14,7 @@ public class Interactor : MonoBehaviour
 {
 
   
-
+    public LayerMask mask;
     public Transform source;
     public float range;
     void Start()
@@ -28,10 +28,11 @@ public class Interactor : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.E)) 
         {
             Ray ray = new Ray(source.position, source.forward);
-            if (Physics.Raycast(ray, out RaycastHit hitInfo, range))
+            if (Physics.Raycast(ray, out RaycastHit hitInfo, range, mask))
             {
                 if (hitInfo.collider.gameObject.TryGetComponent(out IInteractable interactObj))
                 {
+                    
                     interactObj.Interact();
                 }
             }

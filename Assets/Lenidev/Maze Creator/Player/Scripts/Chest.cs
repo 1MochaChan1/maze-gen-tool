@@ -24,7 +24,6 @@ public class Chest : MonoBehaviour, IInteractable
         
         timeCount = 0f;
         open = !open;
-        Debug.Log(open);
     }
     public void Update()
     {
