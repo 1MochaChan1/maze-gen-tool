@@ -17,8 +17,5 @@ public class TestFollow : MonoBehaviour
         var dir = target.transform.position - transform.position;
         transform.position = Vector3.MoveTowards(transform.position,target.transform.position, 0.05f);
         Debug.DrawRay(transform.position, dir);
-
-
-
     }
 }

@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
@@ -35,12 +37,25 @@ public class Player : MonoBehaviour, IPickup
     Rigidbody rb;
 
     InventoryManager inventoryMgr;
+    InputManager inputMgr;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
         inventoryMgr = GetComponent<InventoryManager>();
+    }
+
+    private void OnEnable()
+    {
+        inputMgr = new InputManager();
+        inputMgr.playerControls.Enable();
+        inputMgr.JumpPerformed += Jump;
+    }
+
+    private void OnDestroy()
+    {
+        inputMgr.playerControls.Disable();
     }
 
     // Update is called once per frame
@@ -68,13 +83,13 @@ public class Player : MonoBehaviour, IPickup
     private void FixedUpdate()
     {
         MovePlayer();
-        Jump();
+        //Jump();
     }
 
 
     void MovePlayer()
     {
-        moveDir = ((orientation.forward * vInput) + (orientation.right * hInput));
+        moveDir = ((orientation.forward * inputMgr.MovementInput().y) + (orientation.right * inputMgr.MovementInput().x));
         if (grounded) 
         {
             rb.AddForce(moveDir.normalized * moveSpeed * 10f, ForceMode.Force);
@@ -89,13 +104,19 @@ public class Player : MonoBehaviour, IPickup
 
     void HandleInput()
     {
-        hInput = Input.GetAxisRaw("Horizontal");
-        vInput = Input.GetAxisRaw("Vertical");
+        //hInput = Input.GetAxisRaw("Horizontal");
+        //vInput = Input.GetAxisRaw("Vertical");
     }
 
-    void Jump()
+    private void Jump(InputAction.CallbackContext context)
     {
-        if (Input.GetKey(jumpKey) & grounded)
+        //if (Input.GetKey(jumpKey) & grounded)
+        //{
+        //    rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+        //    rb.AddForce(orientation.up * jumpForce, ForceMode.Impulse);
+        //}
+
+        if(grounded)
         {
             rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
             rb.AddForce(orientation.up * jumpForce, ForceMode.Impulse);
@@ -119,4 +140,6 @@ public class Player : MonoBehaviour, IPickup
     {
         inventoryMgr.addItem(pickup);
     }
+
+
 }

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class GrappleGun : MonoBehaviour
 {
@@ -13,18 +14,33 @@ public class GrappleGun : MonoBehaviour
     public Transform muzzle, cam, player;
     public float maxDistance;
 
+
+    InputManager inputMgr;
     private void Awake()
     {
         lineRenderer = GetComponent<LineRenderer>();
     }
 
+    private void OnEnable()
+    {
+        inputMgr = new InputManager();
+        inputMgr.playerControls.Enable();
+        inputMgr.ShootStart += StartGrapple;
+        inputMgr.ShootStop += StopGrapple;
+    }
+
+    private void OnDestroy()
+    {
+        inputMgr.playerControls.Disable();
+    }
+
     private void Update()
     {
-        if(Input.GetMouseButtonDown(0)) 
-        {
-            StartGrapple();
-        }
-        else if(Input.GetMouseButtonUp(0)) { StopGrapple(); }
+        //if(Input.GetMouseButtonDown(0)) 
+        //{
+        //    StartGrapple();
+        //}
+        //else if(Input.GetMouseButtonUp(0)) { StopGrapple(); }
     }
 
 
@@ -33,8 +49,9 @@ public class GrappleGun : MonoBehaviour
         DrawRope();
     }
 
-    public void StartGrapple()
+    public void StartGrapple(InputAction.CallbackContext ctx)
     {
+        Debug.Log(ctx);
         RaycastHit hit;
         if(Physics.Raycast(cam.position, cam.forward, out hit, maxDistance, grappleableMask))
         {
@@ -65,8 +82,9 @@ public class GrappleGun : MonoBehaviour
         
     }
 
-    public void StopGrapple()
+    public void StopGrapple(InputAction.CallbackContext ctx)
     {
+        Debug.Log(ctx);
         lineRenderer.positionCount = 0;
         Destroy(joint);
     }

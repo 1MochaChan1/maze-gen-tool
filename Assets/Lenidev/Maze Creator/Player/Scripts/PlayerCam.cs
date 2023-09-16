@@ -10,6 +10,8 @@ public class PlayerCam : MonoBehaviour
     public Transform orientaion;
     public Transform head;
 
+    InputManager inputMgr;
+
     float yRotation;
     float xRotation;
     float sensitivityMultiplier=100f;
@@ -17,14 +19,30 @@ public class PlayerCam : MonoBehaviour
     void Start()
     {
        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+       Cursor.visible = false;
+        
+    }
+
+    private void OnEnable()
+    {
+        inputMgr = new InputManager();
+        inputMgr.playerControls.Enable();
+    }
+
+    private void OnDestroy()
+    {
+        inputMgr.playerControls.Disable();
     }
 
     // Update is called once per frame
     void Update()
     {
-        float mouseX = Input.GetAxisRaw("Mouse X") * Time.fixedDeltaTime * horizontalSensitivity * sensitivityMultiplier;
-        float mouseY = Input.GetAxisRaw("Mouse Y") * Time.fixedDeltaTime * verticalSensitivity * sensitivityMultiplier;
+        //float mouseX = Input.GetAxisRaw("Mouse X") * Time.fixedDeltaTime * horizontalSensitivity * sensitivityMultiplier;
+        //float mouseY = Input.GetAxisRaw("Mouse Y") * Time.fixedDeltaTime * verticalSensitivity * sensitivityMultiplier;
+
+
+        float mouseX = inputMgr.MouseInput().x * .05f * Time.fixedDeltaTime * horizontalSensitivity * sensitivityMultiplier;
+        float mouseY = inputMgr.MouseInput().y * .05f * Time.fixedDeltaTime * verticalSensitivity * sensitivityMultiplier;
 
         yRotation += mouseX;
         xRotation -= mouseY;

@@ -24,9 +24,7 @@ public class Pickup : MonoBehaviour
     {
         if (triggered & _player)
         {
-
             transform.position = Vector3.MoveTowards(transform.position, target.transform.position, speed * speedMultiplier);
-
 
         }
 
