@@ -113,6 +113,17 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""84dfc92e-66bb-4199-8cec-25db792af4e3"",
+                    ""path"": ""<Gamepad>/leftStick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""HorizontalMovement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""896331fc-4f6f-42d9-a046-043ae679ef55"",
                     ""path"": ""<Keyboard>/space"",
                     ""interactions"": """",
@@ -124,8 +135,30 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""8ebab3ca-7b74-4a4c-9740-c2849000aaf5"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Jump"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""2419a9cf-57db-4ae8-8004-dedb0511835e"",
                     ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Shoot"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""320fd74d-7348-47c0-a420-2648450ade46"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -156,6 +189,15 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Look"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""4a5dcccd-4910-4520-8316-67c96f2d474a"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -180,6 +222,28 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""action"": ""Vertical"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2a5d82cc-7236-4a1d-ac30-1514bd7e3bb1"",
+                    ""path"": ""<Mouse>/delta"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Look"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""253d128f-a7ee-4186-8aeb-1d4882796a90"",
+                    ""path"": ""<Gamepad>/rightStick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Look"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -195,6 +259,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_MouseMovement = asset.FindActionMap("MouseMovement", throwIfNotFound: true);
         m_MouseMovement_Horizontal = m_MouseMovement.FindAction("Horizontal", throwIfNotFound: true);
         m_MouseMovement_Vertical = m_MouseMovement.FindAction("Vertical", throwIfNotFound: true);
+        m_MouseMovement_Look = m_MouseMovement.FindAction("Look", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -320,12 +385,14 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private List<IMouseMovementActions> m_MouseMovementActionsCallbackInterfaces = new List<IMouseMovementActions>();
     private readonly InputAction m_MouseMovement_Horizontal;
     private readonly InputAction m_MouseMovement_Vertical;
+    private readonly InputAction m_MouseMovement_Look;
     public struct MouseMovementActions
     {
         private @PlayerControls m_Wrapper;
         public MouseMovementActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
         public InputAction @Horizontal => m_Wrapper.m_MouseMovement_Horizontal;
         public InputAction @Vertical => m_Wrapper.m_MouseMovement_Vertical;
+        public InputAction @Look => m_Wrapper.m_MouseMovement_Look;
         public InputActionMap Get() { return m_Wrapper.m_MouseMovement; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -341,6 +408,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Vertical.started += instance.OnVertical;
             @Vertical.performed += instance.OnVertical;
             @Vertical.canceled += instance.OnVertical;
+            @Look.started += instance.OnLook;
+            @Look.performed += instance.OnLook;
+            @Look.canceled += instance.OnLook;
         }
 
         private void UnregisterCallbacks(IMouseMovementActions instance)
@@ -351,6 +421,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Vertical.started -= instance.OnVertical;
             @Vertical.performed -= instance.OnVertical;
             @Vertical.canceled -= instance.OnVertical;
+            @Look.started -= instance.OnLook;
+            @Look.performed -= instance.OnLook;
+            @Look.canceled -= instance.OnLook;
         }
 
         public void RemoveCallbacks(IMouseMovementActions instance)
@@ -378,5 +451,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     {
         void OnHorizontal(InputAction.CallbackContext context);
         void OnVertical(InputAction.CallbackContext context);
+        void OnLook(InputAction.CallbackContext context);
     }
 }

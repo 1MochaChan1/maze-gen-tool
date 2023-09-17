@@ -54,11 +54,13 @@ public class InputManager
 
 
 
+
     public Vector2 MouseInput()
     {
-        return new Vector2(
-            playerControls.MouseMovement.Horizontal.ReadValue<float>(),
-            playerControls.MouseMovement.Vertical.ReadValue<float>());
+        //return new Vector2(
+        //    playerControls.MouseMovement.Horizontal.ReadValue<float>(),
+        //    playerControls.MouseMovement.Vertical.ReadValue<float>());
 
+        return playerControls.MouseMovement.Look.ReadValue<Vector2>();
     }
 }

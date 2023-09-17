@@ -14,12 +14,12 @@ public class PlayerCam : MonoBehaviour
 
     float yRotation;
     float xRotation;
-    float sensitivityMultiplier=100f;
+    float sensitivityMultiplier=50f;
 
     void Start()
     {
-       Cursor.lockState = CursorLockMode.Locked;
-       Cursor.visible = false;
+       //Cursor.lockState = CursorLockMode.Locked;
+       //Cursor.visible = false;
         
     }
 
@@ -41,8 +41,8 @@ public class PlayerCam : MonoBehaviour
         //float mouseY = Input.GetAxisRaw("Mouse Y") * Time.fixedDeltaTime * verticalSensitivity * sensitivityMultiplier;
 
 
-        float mouseX = inputMgr.MouseInput().x * .05f * Time.fixedDeltaTime * horizontalSensitivity * sensitivityMultiplier;
-        float mouseY = inputMgr.MouseInput().y * .05f * Time.fixedDeltaTime * verticalSensitivity * sensitivityMultiplier;
+        float mouseX = inputMgr.MouseInput().x * Time.deltaTime * horizontalSensitivity * sensitivityMultiplier;
+        float mouseY = inputMgr.MouseInput().y * Time.deltaTime * verticalSensitivity * sensitivityMultiplier;
 
         yRotation += mouseX;
         xRotation -= mouseY;

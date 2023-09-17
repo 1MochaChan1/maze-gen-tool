@@ -84,7 +84,6 @@ public class GrappleGun : MonoBehaviour
 
     public void StopGrapple(InputAction.CallbackContext ctx)
     {
-        Debug.Log(ctx);
         lineRenderer.positionCount = 0;
         Destroy(joint);
     }
